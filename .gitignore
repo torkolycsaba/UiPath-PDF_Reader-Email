@@ -1,0 +1,21 @@
+# UiPath Studio temporary files
+.local/
+.settings/
+.tmh/
+
+# NuGet packages folder
+*.nupkg
+
+# Log files
+*.log
+
+# Other temporary files
+*.screenshot
+################################################################################
+# Added by UiPath Studio
+# Prevent caching and local artifacts from being committed
+################################################################################
+.local
+################################################################################
+# End of UiPath Studio common ignores
+################################################################################
