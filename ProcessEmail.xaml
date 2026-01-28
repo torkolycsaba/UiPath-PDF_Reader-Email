@@ -1,10 +1,13 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="ProcessEmail" this:ProcessEmail.in_Config="[New Dictionary(Of String, String)()]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:this="clr-namespace:" xmlns:uasc="clr-namespace:UiPath.Activities.System.Collections;assembly=UiPath.System.Activities" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:uggm="clr-namespace:UiPath.GSuite.Gmail.Models;assembly=UiPath.GSuite" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:upr="clr-namespace:UiPath.Platform.ResourceHandling;assembly=UiPath.Platform" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessEmail" this:ProcessEmail.in_Config="[New Dictionary(Of String, String)()]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:this="clr-namespace:" xmlns:uasc="clr-namespace:UiPath.Activities.System.Collections;assembly=UiPath.System.Activities" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:uggm="clr-namespace:UiPath.GSuite.Gmail.Models;assembly=UiPath.GSuite" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:ummm="clr-namespace:UiPath.MicrosoftOffice365.Mail.Models;assembly=UiPath.MicrosoftOffice365" xmlns:upr="clr-namespace:UiPath.Platform.ResourceHandling;assembly=UiPath.Platform" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
+    <x:Property Name="in_OutlookMessage" Type="InArgument(umm:Office365Message)" />
+    <x:Property Name="in_UiPathEventObjectId" Type="InArgument(x:String)" />
+    <x:Property Name="in_UiPathEventConnector" Type="InArgument(x:String)" />
     <x:Property Name="out_ResultDT" Type="OutArgument(sd:DataTable)" />
     <x:Property Name="out_ExtractionRules" Type="OutArgument(scg:List(scg:Dictionary(x:String, x:String)))" />
     <x:Property Name="out_FilesFound" Type="OutArgument(x:Boolean)" />
     <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:String))" />
-    <x:Property Name="in_EmailMessage" Type="InArgument(ugm:GmailMessage)" />
+    <x:Property Name="in_GmailMessage" Type="InArgument(ugm:GmailMessage)" />
     <x:Property Name="out_DownloadedFiles" Type="OutArgument(scg:IEnumerable(upr:ILocalResource))" />
   </x:Members>
   <VisualBasic.Settings>
@@ -65,6 +68,18 @@
       <x:String>UiPath.GSuite</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Models</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Models</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Mail.Models</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Files.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Filters</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Mail.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Filters</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.MicrosoftOffice365</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -140,9 +155,10 @@
       <AssemblyReference>UiPath.IntelligentOCR.StudioWeb.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="ProcessEmail" sap:VirtualizedContainerService.HintSize="963,3229" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="ProcessEmail" sap:VirtualizedContainerService.HintSize="963,5117" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(scg:Dictionary(x:String, x:String))" Default="[New List(Of Dictionary(Of String, String))()]" Name="extractionRules" />
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="filesFound" />
@@ -153,13 +169,14 @@
       <Variable x:TypeArguments="s:String[]" Name="ruleParts" />
       <Variable x:TypeArguments="sd:DataTable" Default="[New DataTable()]" Name="dt_Results" />
       <Variable x:TypeArguments="uggm:GmailAttachmentLocalItem[]" Name="downloadedFiles_gmail" />
+      <Variable x:TypeArguments="ummm:O365AttachmentLocalItem[]" Name="downloadedFiles_outlook" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Sequence sap2010:Annotation.AnnotationText="This workflow assumes the e-mail subject was already checked before being invoked" DisplayName="Save every attachment filtered by name to specified folder" sap:VirtualizedContainerService.HintSize="583,3040" sap2010:WorkflowViewState.IdRef="Sequence_8">
+    <Sequence sap2010:Annotation.AnnotationText="This workflow assumes the e-mail subject was already checked before being invoked" DisplayName="Save every attachment filtered by name to specified folder" sap:VirtualizedContainerService.HintSize="583,4928" sap2010:WorkflowViewState.IdRef="Sequence_8">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -174,17 +191,44 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </ui:LogMessage>
-      <uga:DownloadAttachmentsConnections ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" DestinationPath="{x:Null}" Filter="{x:Null}" Result="{x:Null}" AuthScopesInvalid="False" ConflictResolution="Replace" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Download Email Attachments" Email="[in_EmailMessage]" ExcludeInlineAttachments="False" FilterByFileNames="[&quot;*&quot; + in_Config(&quot;AttachmentKeyword&quot;) + &quot;*.pdf&quot;]" sap:VirtualizedContainerService.HintSize="549,57" sap2010:WorkflowViewState.IdRef="DownloadAttachmentsConnections_4" NewResult="[downloadedFiles_gmail]" SearchMode="UseSimple" UseConnectionService="True">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </uga:DownloadAttachmentsConnections>
-      <If Condition="[downloadedFiles_gmail.Count &lt; 1]" sap:VirtualizedContainerService.HintSize="549,2803" sap2010:WorkflowViewState.IdRef="If_2">
+      <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[in_UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="549,1061" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+        <Switch.Default>
+          <Sequence DisplayName="Default" sap:VirtualizedContainerService.HintSize="450,230" sap2010:WorkflowViewState.IdRef="Sequence_14">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,170" sap2010:WorkflowViewState.IdRef="LogMessage_4" Message="[&quot;Invalid Connector at processEmail&quot;]" />
+          </Sequence>
+        </Switch.Default>
+        <Sequence x:Key="uipath-google-gmail" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,292" sap2010:WorkflowViewState.IdRef="Sequence_12">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <uga:DownloadAttachmentsConnections ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" DestinationPath="{x:Null}" Filter="{x:Null}" Result="{x:Null}" AuthScopesInvalid="False" ConflictResolution="Replace" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Download Email Attachments" Email="[in_GmailMessage]" ExcludeInlineAttachments="False" FilterByFileNames="[&quot;*&quot; + in_Config(&quot;AttachmentKeyword&quot;) + &quot;*.pdf&quot;]" sap:VirtualizedContainerService.HintSize="416,232" sap2010:WorkflowViewState.IdRef="DownloadAttachmentsConnections_4" NewResult="[downloadedFiles_gmail]" SearchMode="UseSimple" UseConnectionService="True">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </uga:DownloadAttachmentsConnections>
+        </Sequence>
+        <Sequence x:Key="uipath-microsoft-outlook365" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,292" sap2010:WorkflowViewState.IdRef="Sequence_13">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <umam:DownloadEmailAttachments ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" DestinationPath="{x:Null}" Filter="{x:Null}" Result="{x:Null}" AuthScopesInvalid="False" ConflictResolution="Fail" ConnectionId="1be5e33c-9f21-4676-a5e5-8cd9facdebd8" DisplayName="Download Email Attachments" Email="[in_OutlookMessage]" ExcludeInlineAttachments="False" FilterByFileNames="[&quot;*&quot; + in_Config(&quot;AttachmentKeyword&quot;) + &quot;*.pdf&quot;]" sap:VirtualizedContainerService.HintSize="416,232" sap2010:WorkflowViewState.IdRef="DownloadEmailAttachments_1" NewResult="[downloadedFiles_outlook]" SearchMode="UseSimple" UseConnectionService="True" />
+        </Sequence>
+      </Switch>
+      <If Condition="[(downloadedFiles_gmail Is Nothing OrElse downloadedFiles_gmail.Count = 0) AndAlso (downloadedFiles_outlook Is Nothing OrElse downloadedFiles_outlook.Count = 0)]" sap:VirtualizedContainerService.HintSize="549,3687" sap2010:WorkflowViewState.IdRef="If_2">
         <If.Then>
-          <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="547,295" sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="547,413" sap2010:WorkflowViewState.IdRef="Sequence_6">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -198,10 +242,10 @@
                 <InArgument x:TypeArguments="x:Boolean">[false]</InArgument>
               </Assign.Value>
             </Assign>
-            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="513,52" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;No attachment found with the current attachmentKeyword filter&quot;]">
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="513,170" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;No attachment found with the current attachmentKeyword filter&quot;]">
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                   <x:Boolean x:Key="IsPinned">False</x:Boolean>
                 </scg:Dictionary>
               </sap:WorkflowViewStateService.ViewState>
@@ -209,7 +253,7 @@
           </Sequence>
         </If.Then>
         <If.Else>
-          <Sequence DisplayName="File(s) found" sap:VirtualizedContainerService.HintSize="547,2378" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <Sequence DisplayName="File(s) found" sap:VirtualizedContainerService.HintSize="547,3144" sap2010:WorkflowViewState.IdRef="Sequence_7">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -223,14 +267,48 @@
                 <InArgument x:TypeArguments="x:Boolean">[true]</InArgument>
               </Assign.Value>
             </Assign>
-            <Assign sap:VirtualizedContainerService.HintSize="513,179" sap2010:WorkflowViewState.IdRef="Assign_4">
-              <Assign.To>
-                <OutArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)">[out_DownloadedFiles]</OutArgument>
-              </Assign.To>
-              <Assign.Value>
-                <InArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)">[downloadedFiles_gmail]</InArgument>
-              </Assign.Value>
-            </Assign>
+            <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[in_UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="513,945" sap2010:WorkflowViewState.IdRef="Switch`1_2">
+              <Switch.Default>
+                <Sequence DisplayName="Default" sap:VirtualizedContainerService.HintSize="450,226" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,166" sap2010:WorkflowViewState.IdRef="LogMessage_5" Message="[&quot;Invalid Connector at processEmail&quot;]" />
+                </Sequence>
+              </Switch.Default>
+              <Sequence x:Key="uipath-google-gmail" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,230" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign sap:VirtualizedContainerService.HintSize="416,170" sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)">[out_DownloadedFiles]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)">[downloadedFiles_gmail]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+              <Sequence x:Key="uipath-microsoft-outlook365" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,230" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign sap:VirtualizedContainerService.HintSize="416,170" sap2010:WorkflowViewState.IdRef="Assign_9">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)">[out_DownloadedFiles]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="ummm:O365AttachmentLocalItem[]">[downloadedFiles_outlook]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </Switch>
             <Sequence DisplayName="Getting user extraction rules" sap:VirtualizedContainerService.HintSize="513,1956" sap2010:WorkflowViewState.IdRef="Sequence_9">
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">

@@ -1,6 +1,8 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Notification" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:ugage="clr-namespace:UiPath.GSuite.Activities.Gmail.Enums;assembly=UiPath.GSuite.Activities" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:usau="clr-namespace:UiPath.Shared.Activities.Utils;assembly=UiPath.GSuite.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Notification" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:ugage="clr-namespace:UiPath.GSuite.Activities.Gmail.Enums;assembly=UiPath.GSuite.Activities" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umame="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail.Enums;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umamm="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail.Models;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:usau="clr-namespace:UiPath.Shared.Activities.Utils;assembly=UiPath.GSuite.Activities" xmlns:usau1="clr-namespace:UiPath.Shared.Activities.Utils;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="in_EmailMessage" Type="InArgument(ugm:GmailMessage)" />
+    <x:Property Name="in_UiPathEventConnector" Type="InArgument(x:String)" />
+    <x:Property Name="in_OutlookMessage" Type="InArgument(umm:Office365Message)" />
+    <x:Property Name="in_GmailMessage" Type="InArgument(ugm:GmailMessage)" />
     <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:String))" />
   </x:Members>
   <VisualBasic.Settings>
@@ -59,6 +61,12 @@
       <x:String>System.Numerics</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Models</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Models</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Models</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.MicrosoftOffice365</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -123,9 +131,10 @@
       <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
       <AssemblyReference>UiPath.GSuite</AssemblyReference>
       <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Notification" sap:VirtualizedContainerService.HintSize="963,940" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Notification" sap:VirtualizedContainerService.HintSize="963,1723" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="emailTo" />
     </Sequence.Variables>
@@ -134,13 +143,13 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Sequence sap:VirtualizedContainerService.HintSize="450,917" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence sap:VirtualizedContainerService.HintSize="486,1700" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">True</x:Boolean>
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
-      <Assign sap:VirtualizedContainerService.HintSize="416,175" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_1">
         <Assign.To>
           <OutArgument x:TypeArguments="x:String">[emailTo]</OutArgument>
         </Assign.To>
@@ -148,28 +157,80 @@
           <InArgument x:TypeArguments="x:String">[in_Config("NotificationChannel")]</InArgument>
         </Assign.Value>
       </Assign>
-      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,175" sap2010:WorkflowViewState.IdRef="LogMessage_5" Message="[&quot;Processing Notification started&quot;]" />
-      <uga:SendEmailConnections ArgumentAttachmentPaths="{x:Null}" ArgumentAttachments="{x:Null}" AttachmentPaths="{x:Null}" Attachments="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" SingleAttachment="{x:Null}" TextBody="{x:Null}" AttachmentInputMode="UseExisting" AuthScopesInvalid="False" Body="[fileCount.ToString + &quot; files have been successfully processed. You can check the extracted data at your defined path.&quot;]" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Send Email" sap:VirtualizedContainerService.HintSize="416,484" sap2010:WorkflowViewState.IdRef="SendEmailConnections_1" Importance="Normal" InputType="HTML" SaveAsDraft="False" Subject="[&quot;Email(s) have been processed for subject: &quot; + in_EmailMessage.Subject]" To="[New List(Of String) From {emailTo}]" UseConnectionService="True">
-        <uga:SendEmailConnections.AttachmentsBackup>
-          <usau:BackupSlot x:TypeArguments="ugage:AttachmentInputMode" StoredValue="UseExisting">
-            <usau:BackupSlot.BackupValues>
-              <scg:List x:TypeArguments="x:Object" x:Key="UseExisting" Capacity="1">
-                <x:Null />
-              </scg:List>
-              <scg:List x:TypeArguments="x:Object" x:Key="Builder" Capacity="1">
-                <x:Null />
-              </scg:List>
-            </usau:BackupSlot.BackupValues>
-          </usau:BackupSlot>
-        </uga:SendEmailConnections.AttachmentsBackup>
-        <uga:SendEmailConnections.InputTypeBackup>
-          <usau:BackupSlot x:TypeArguments="ugage:BodyInputType" StoredValue="HTML">
-            <usau:BackupSlot.BackupValues>
-              <scg:Dictionary x:TypeArguments="ugage:BodyInputType, scg:List(x:Object)" />
-            </usau:BackupSlot.BackupValues>
-          </usau:BackupSlot>
-        </uga:SendEmailConnections.InputTypeBackup>
-      </uga:SendEmailConnections>
+      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="LogMessage_5" Message="[&quot;Processing Notification started&quot;]" />
+      <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[in_UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="452,1267" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+        <Switch.Default>
+          <Sequence DisplayName="Default" sap:VirtualizedContainerService.HintSize="450,90" sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Sequence>
+        </Switch.Default>
+        <Sequence x:Key="uipath-google-gmail" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,444" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <uga:SendEmailConnections ArgumentAttachmentPaths="{x:Null}" ArgumentAttachments="{x:Null}" AttachmentPaths="{x:Null}" Attachments="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" SingleAttachment="{x:Null}" TextBody="{x:Null}" AttachmentInputMode="UseExisting" AuthScopesInvalid="False" Body="[fileCount.ToString + &quot; files have been successfully processed. You can check the extracted data at your defined path.&lt;br&gt;&lt;br&gt;This was an automated message.&quot;]" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Send Email" sap:VirtualizedContainerService.HintSize="416,384" sap2010:WorkflowViewState.IdRef="SendEmailConnections_1" Importance="Normal" InputType="HTML" SaveAsDraft="False" Subject="[&quot;Email(s) have been processed for subject: &quot; + in_GmailMessage.Subject]" To="[New List(Of String) From {emailTo}]" UseConnectionService="True">
+            <uga:SendEmailConnections.AttachmentsBackup>
+              <usau:BackupSlot x:TypeArguments="ugage:AttachmentInputMode" StoredValue="UseExisting">
+                <usau:BackupSlot.BackupValues>
+                  <scg:List x:TypeArguments="x:Object" x:Key="UseExisting" Capacity="1">
+                    <x:Null />
+                  </scg:List>
+                  <scg:List x:TypeArguments="x:Object" x:Key="Builder" Capacity="1">
+                    <x:Null />
+                  </scg:List>
+                </usau:BackupSlot.BackupValues>
+              </usau:BackupSlot>
+            </uga:SendEmailConnections.AttachmentsBackup>
+            <uga:SendEmailConnections.InputTypeBackup>
+              <usau:BackupSlot x:TypeArguments="ugage:BodyInputType" StoredValue="HTML">
+                <usau:BackupSlot.BackupValues>
+                  <scg:Dictionary x:TypeArguments="ugage:BodyInputType, scg:List(x:Object)" />
+                </usau:BackupSlot.BackupValues>
+              </usau:BackupSlot>
+            </uga:SendEmailConnections.InputTypeBackup>
+          </uga:SendEmailConnections>
+        </Sequence>
+        <Sequence x:Key="uipath-microsoft-outlook365" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,495" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <umam:SendMailConnections ArgumentAttachmentPaths="{x:Null}" AttachmentList="{x:Null}" AttachmentPaths="{x:Null}" Attachments="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" Mailbox="{x:Null}" MailboxBackup="{x:Reference __ReferenceID0}" ReplyTo="{x:Null}" TextBody="{x:Null}" AttachmentInputMode="Existing" AuthScopesInvalid="False" Body="[fileCount.ToString + &quot; files have been successfully processed. You can check the extracted data at your defined path.&lt;br&gt;&lt;br&gt;This was an automated message.&quot;]" ConnectionId="1be5e33c-9f21-4676-a5e5-8cd9facdebd8" DisplayName="Send Email" sap:VirtualizedContainerService.HintSize="416,435" sap2010:WorkflowViewState.IdRef="SendMailConnections_1" Importance="Normal" InputType="HTML" SaveAsDraft="False" Subject="[&quot;Email(s) have been processed for subject: &quot; + in_OutlookMessage.Subject]" To="[New List(Of String) From {emailTo}]" UseConnectionService="True" UseSharedMailbox="False">
+            <umam:SendMailConnections.AttachmentsBackup>
+              <usau1:BackupSlot x:TypeArguments="umame:AttachmentInputMode" StoredValue="Existing">
+                <usau1:BackupSlot.BackupValues>
+                  <scg:Dictionary x:TypeArguments="umame:AttachmentInputMode, scg:List(x:Object)" />
+                </usau1:BackupSlot.BackupValues>
+              </usau1:BackupSlot>
+            </umam:SendMailConnections.AttachmentsBackup>
+            <umam:SendMailConnections.InputTypeBackup>
+              <usau1:BackupSlot x:TypeArguments="umame:BodyInputType" StoredValue="HTML">
+                <usau1:BackupSlot.BackupValues>
+                  <scg:Dictionary x:TypeArguments="umame:BodyInputType, scg:List(x:Object)" />
+                </usau1:BackupSlot.BackupValues>
+              </usau1:BackupSlot>
+            </umam:SendMailConnections.InputTypeBackup>
+            <umam:SendMailConnections.MailboxArg>
+              <umamm:MailboxArgument SharedMailbox="{x:Null}" UseSharedMailbox="False">
+                <umamm:MailboxArgument.Backup>
+                  <usau1:BackupSlot x:TypeArguments="umame:MailboxSelectionMode" x:Name="__ReferenceID0" StoredValue="NoMailbox">
+                    <usau1:BackupSlot.BackupValues>
+                      <scg:Dictionary x:TypeArguments="umame:MailboxSelectionMode, scg:List(x:Object)" />
+                    </usau1:BackupSlot.BackupValues>
+                  </usau1:BackupSlot>
+                </umamm:MailboxArgument.Backup>
+              </umamm:MailboxArgument>
+            </umam:SendMailConnections.MailboxArg>
+          </umam:SendMailConnections>
+        </Sequence>
+      </Switch>
     </Sequence>
   </Sequence>
 </Activity>

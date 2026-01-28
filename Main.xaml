@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_EmailMessage="[New System.Net.Mail.MailMessage()]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:snm="clr-namespace:System.Net.Mail;assembly=System.Net.Mail" xmlns:this="clr-namespace:" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:upr="clr-namespace:UiPath.Platform.ResourceHandling;assembly=UiPath.Platform" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_EmailMessage="[New System.Net.Mail.MailMessage()]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:snm="clr-namespace:System.Net.Mail;assembly=System.Net.Mail" xmlns:this="clr-namespace:" xmlns:uga="clr-namespace:UiPath.GSuite.Activities;assembly=UiPath.GSuite.Activities" xmlns:ugm="clr-namespace:UiPath.GSuite.Models;assembly=UiPath.GSuite" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umame="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail.Enums;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umamm="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail.Models;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:upr="clr-namespace:UiPath.Platform.ResourceHandling;assembly=UiPath.Platform" xmlns:usau="clr-namespace:UiPath.Shared.Activities.Utils;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="UiPathEventObjectType" Type="InArgument(x:String)" />
     <x:Property Name="UiPathEventObjectId" Type="InArgument(x:String)" />
@@ -72,6 +72,7 @@
       <x:String>System.Numerics</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>UiPath.MicrosoftOffice365</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -154,9 +155,9 @@
       <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="963,2600" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="963,3066" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="ugm:GmailMessage" Name="Email" />
+      <Variable x:TypeArguments="ugm:GmailMessage" Name="GmailMessage" />
       <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Name="config" />
       <Variable x:TypeArguments="x:Boolean" Name="main_filesFound" />
       <Variable x:TypeArguments="scg:IEnumerable(upr:ILocalResource)" Name="main_downloadedFiles" />
@@ -164,13 +165,14 @@
       <Variable x:TypeArguments="scg:List(scg:Dictionary(x:String, x:String))" Name="extractionRules" />
       <Variable x:TypeArguments="x:Boolean" Name="processFiles_Outcome" />
       <Variable x:TypeArguments="x:Int32" Name="tempFileCount" />
+      <Variable x:TypeArguments="umm:Office365Message" Name="OutlookMessage" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="452,699" sap2010:WorkflowViewState.IdRef="Switch`1_2">
+    <Switch x:TypeArguments="x:String" DisplayName="Check which connector the event was triggered by" Expression="[UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="522,1028" sap2010:WorkflowViewState.IdRef="Switch`1_4">
       <Switch.Default>
         <Sequence DisplayName="Default" sap:VirtualizedContainerService.HintSize="450,234" sap2010:WorkflowViewState.IdRef="Sequence_17">
           <sap:WorkflowViewStateService.ViewState>
@@ -193,21 +195,41 @@
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
-        <uga:GetEmailByIdConnections ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" AuthScopesInvalid="False" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Get Email by ID" EmailId="[UiPathEventObjectId]" sap:VirtualizedContainerService.HintSize="416,180" sap2010:WorkflowViewState.IdRef="GetEmailByIdConnections_1" Result="[Email]" UseConnectionService="True" />
+        <uga:GetEmailByIdConnections ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" AuthScopesInvalid="False" ConnectionId="f46dc0cc-e200-4f67-886e-adca6687f232" DisplayName="Get Email by ID" EmailId="[UiPathEventObjectId]" sap:VirtualizedContainerService.HintSize="416,180" sap2010:WorkflowViewState.IdRef="GetEmailByIdConnections_1" Result="[GmailMessage]" UseConnectionService="True" />
+      </Sequence>
+      <Sequence x:Key="uipath-microsoft-outlook365" DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,291" sap2010:WorkflowViewState.IdRef="Sequence_18">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <umam:GetEmailByIdConnections ConnectionAccountName="{x:Null}" ContinueOnError="{x:Null}" MailboxBackup="{x:Reference __ReferenceID0}" SharedMailbox="{x:Null}" AuthScopesInvalid="False" BodyAsHtml="False" ConnectionId="1be5e33c-9f21-4676-a5e5-8cd9facdebd8" DisplayName="Get Email by ID" EmailId="[UiPathEventObjectId]" sap:VirtualizedContainerService.HintSize="416,227" sap2010:WorkflowViewState.IdRef="GetEmailByIdConnections_2" Result="[OutlookMessage]" UseConnectionService="True" UseSharedMailbox="False">
+          <umam:GetEmailByIdConnections.MailboxArg>
+            <umamm:MailboxArgument SharedMailbox="{x:Null}" UseSharedMailbox="False">
+              <umamm:MailboxArgument.Backup>
+                <usau:BackupSlot x:TypeArguments="umame:MailboxSelectionMode" x:Name="__ReferenceID0" StoredValue="NoMailbox">
+                  <usau:BackupSlot.BackupValues>
+                    <scg:Dictionary x:TypeArguments="umame:MailboxSelectionMode, scg:List(x:Object)" />
+                  </usau:BackupSlot.BackupValues>
+                </usau:BackupSlot>
+              </umamm:MailboxArgument.Backup>
+            </umamm:MailboxArgument>
+          </umam:GetEmailByIdConnections.MailboxArg>
+        </umam:GetEmailByIdConnections>
       </Sequence>
     </Switch>
-    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="InitConfig - Invoke Workflow File (InitConfig.xaml)" sap:VirtualizedContainerService.HintSize="452,57" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="InitConfig.xaml">
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="InitConfig - Invoke Workflow File (InitConfig.xaml)" sap:VirtualizedContainerService.HintSize="522,182" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="InitConfig.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="out_Config">[config]</OutArgument>
       </ui:InvokeWorkflowFile.Arguments>
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           <x:Boolean x:Key="IsPinned">False</x:Boolean>
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:InvokeWorkflowFile>
-    <If Condition="[Email.Subject.Contains(config(&quot;SubjectFilter&quot;))]" sap:VirtualizedContainerService.HintSize="452,614" sap2010:WorkflowViewState.IdRef="If_1">
+    <If Condition="[(GmailMessage IsNot Nothing AndAlso GmailMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString)) OrElse (OutlookMessage IsNot Nothing AndAlso OutlookMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString))]" sap:VirtualizedContainerService.HintSize="522,614" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,241" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <sap:WorkflowViewStateService.ViewState>
@@ -217,11 +239,14 @@
           </sap:WorkflowViewStateService.ViewState>
           <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="ProcessEmail - Invoke Workflow File (ProcessEmail.xaml)" sap:VirtualizedContainerService.HintSize="416,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ProcessEmail.xaml">
             <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="umm:Office365Message" x:Key="in_OutlookMessage">[OutlookMessage]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_UiPathEventObjectId">[UiPathEventObjectId]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_UiPathEventConnector">[UiPathEventConnector]</InArgument>
               <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_ResultDT">[dt_baseOfResult]</OutArgument>
               <OutArgument x:TypeArguments="scg:List(scg:Dictionary(x:String, x:String))" x:Key="out_ExtractionRules">[extractionRules]</OutArgument>
               <OutArgument x:TypeArguments="x:Boolean" x:Key="out_FilesFound">[main_filesFound]</OutArgument>
               <InArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="in_Config">[config]</InArgument>
-              <InArgument x:TypeArguments="ugm:GmailMessage" x:Key="in_EmailMessage">[Email]</InArgument>
+              <InArgument x:TypeArguments="ugm:GmailMessage" x:Key="in_GmailMessage">[GmailMessage]</InArgument>
               <OutArgument x:TypeArguments="scg:IEnumerable(upr:ILocalResource)" x:Key="out_DownloadedFiles">[main_downloadedFiles]</OutArgument>
             </ui:InvokeWorkflowFile.Arguments>
           </ui:InvokeWorkflowFile>
@@ -238,7 +263,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <If Condition="[main_filesFound = true]" sap:VirtualizedContainerService.HintSize="452,610" sap2010:WorkflowViewState.IdRef="If_5">
+    <If Condition="[main_filesFound = true]" sap:VirtualizedContainerService.HintSize="522,614" sap2010:WorkflowViewState.IdRef="If_5">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,241" sap2010:WorkflowViewState.IdRef="Sequence_4">
           <sap:WorkflowViewStateService.ViewState>
@@ -259,7 +284,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="450,230" sap2010:WorkflowViewState.IdRef="Sequence_5">
+        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="450,234" sap2010:WorkflowViewState.IdRef="Sequence_5">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -269,24 +294,26 @@
         </Sequence>
       </If.Else>
     </If>
-    <If Condition="[processFiles_Outcome AndAlso main_filesFound]" sap:VirtualizedContainerService.HintSize="452,597" sap2010:WorkflowViewState.IdRef="If_6">
+    <If Condition="[processFiles_Outcome AndAlso main_filesFound]" sap:VirtualizedContainerService.HintSize="452,605" sap2010:WorkflowViewState.IdRef="If_6">
       <If.Then>
-        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,237" sap2010:WorkflowViewState.IdRef="Sequence_6">
+        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,241" sap2010:WorkflowViewState.IdRef="Sequence_6">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Notification - Invoke Workflow File (Notification.xaml)" sap:VirtualizedContainerService.HintSize="416,173" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Notification.xaml">
+          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Notification - Invoke Workflow File (Notification.xaml)" sap:VirtualizedContainerService.HintSize="416,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Notification.xaml">
             <ui:InvokeWorkflowFile.Arguments>
-              <InArgument x:TypeArguments="ugm:GmailMessage" x:Key="in_EmailMessage">[Email]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_UiPathEventConnector">[UiPathEventConnector]</InArgument>
+              <InArgument x:TypeArguments="umm:Office365Message" x:Key="in_OutlookMessage">[OutlookMessage]</InArgument>
+              <InArgument x:TypeArguments="ugm:GmailMessage" x:Key="in_GmailMessage">[GmailMessage]</InArgument>
               <InArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="in_Config">[config]</InArgument>
             </ui:InvokeWorkflowFile.Arguments>
           </ui:InvokeWorkflowFile>
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="450,230" sap2010:WorkflowViewState.IdRef="Sequence_7">
+        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="450,234" sap2010:WorkflowViewState.IdRef="Sequence_7">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>

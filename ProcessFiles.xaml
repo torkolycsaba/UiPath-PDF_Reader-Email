@@ -256,7 +256,7 @@
                                   <OutArgument x:TypeArguments="x:String">[regexPattern]</OutArgument>
                                 </Assign.To>
                                 <Assign.Value>
-                                  <InArgument x:TypeArguments="x:String">[currentRule("AnchorText") &amp; "[\s\S]{0,20}?([0-9]{3,})"]</InArgument>
+                                  <InArgument x:TypeArguments="x:String">[currentRule("AnchorText") &amp; "[\s\S]{0,20}?([A-Z\-]*[0-9]{3,})"]</InArgument>
                                 </Assign.Value>
                               </Assign>
                             </Sequence>
