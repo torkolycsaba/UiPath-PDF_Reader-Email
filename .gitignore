@@ -11,11 +11,9 @@
 
 # Other temporary files
 *.screenshot
-################################################################################
-# Added by UiPath Studio
-# Prevent caching and local artifacts from being committed
-################################################################################
-.local
-################################################################################
-# End of UiPath Studio common ignores
-################################################################################
+
+# Private test configuration file
+TestData/private.testing.config.json
+
+# Specific test data file
+TestData/Invoices.xlsx

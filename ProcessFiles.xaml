@@ -1,5 +1,6 @@
 <Activity mc:Ignorable="sap sap2010" x:Class="ProcessFiles" this:ProcessFiles.in_ExtractionRules="[New System.Collections.Generic.List(Of System.Collections.Generic.Dictionary(Of System.String, System.String))()]" this:ProcessFiles.in_dt_BaseOfResult="[New DataTable()]" this:ProcessFiles.in_Config="[New Dictionary(Of String, String)()]" this:ProcessFiles.in_Files="[System.Linq.Enumerable.Empty(Of UiPath.Platform.ResourceHandling.ILocalResource)()]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uisape="clr-namespace:UiPath.IntelligentOCR.StudioWeb.Activities.PDF.ExtractPDFText;assembly=UiPath.IntelligentOCR.StudioWeb.Activities" xmlns:upr="clr-namespace:UiPath.Platform.ResourceHandling;assembly=UiPath.Platform" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
+    <x:Property Name="out_ResultsDB" Type="OutArgument(sd:DataTable)" />
     <x:Property Name="in_ExtractionRules" Type="InArgument(scg:List(scg:Dictionary(x:String, x:String)))" />
     <x:Property Name="in_dt_BaseOfResult" Type="InArgument(sd:DataTable)" />
     <x:Property Name="out_ProcessOutcome" Type="OutArgument(x:Boolean)" />
@@ -143,9 +144,16 @@
       <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
       <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.CodeDom</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Forms</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.Watcher</AssemblyReference>
+      <AssemblyReference>System.IO.Packaging</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.AccessControl</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.DriveInfo</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="ProcessFiles" sap:VirtualizedContainerService.HintSize="963,4763" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="ProcessFiles" sap:VirtualizedContainerService.HintSize="963,4938" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Int32" Name="out_RowCount" />
       <Variable x:TypeArguments="x:String" Name="extractedValue" />
@@ -323,6 +331,14 @@
         </Sequence>
       </TryCatch.Finally>
     </TryCatch>
+    <Assign sap:VirtualizedContainerService.HintSize="572,175" sap2010:WorkflowViewState.IdRef="Assign_18">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[out_ResultsDB]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[in_dt_BaseOfResult]</InArgument>
+      </Assign.Value>
+    </Assign>
     <Assign sap:VirtualizedContainerService.HintSize="572,175" sap2010:WorkflowViewState.IdRef="Assign_16">
       <Assign.To>
         <OutArgument x:TypeArguments="x:Int32">[out_RowCount]</OutArgument>
@@ -347,7 +363,7 @@
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <ui:WriteRange StartingCell="{x:Null}" WorkbookPathResource="{x:Null}" DataTable="[in_dt_BaseOfResult]" DisplayName="Write Range Workbook" sap:VirtualizedContainerService.HintSize="416,152" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Results" WorkbookPath="[in_Config(&quot;OutputExcelPath&quot;)]" />
+          <ui:WriteRange StartingCell="{x:Null}" WorkbookPathResource="{x:Null}" DataTable="[in_dt_BaseOfResult]" DisplayName="Write Range Workbook" sap:VirtualizedContainerService.HintSize="416,152" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Results" WorkbookPath="[Path.Combine(Path.GetDirectoryName(in_Config(&quot;OutputExcelPath&quot;).ToString), Path.GetFileNameWithoutExtension(in_Config(&quot;OutputExcelPath&quot;).ToString) + &quot;_&quot; + Now.ToString(&quot;yyyyMMdd_HHmm&quot;) + Path.GetExtension(in_Config(&quot;OutputExcelPath&quot;).ToString))]" />
           <Assign sap:VirtualizedContainerService.HintSize="416,179" sap2010:WorkflowViewState.IdRef="Assign_11">
             <Assign.To>
               <OutArgument x:TypeArguments="x:Boolean">[out_ProcessOutcome]</OutArgument>

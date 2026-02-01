@@ -5,6 +5,7 @@
     <x:Property Name="UiPathEventConnector" Type="InArgument(x:String)" />
     <x:Property Name="UiPathEvent" Type="InArgument(x:String)" />
     <x:Property Name="in_EmailMessage" Type="InArgument(snm:MailMessage)" />
+    <x:Property Name="out_dt_Results" Type="OutArgument(sd:DataTable)" />
   </x:Members>
   <VisualBasic.Settings>
     <x:Null />
@@ -172,7 +173,7 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Switch x:TypeArguments="x:String" DisplayName="Check which connector the event was triggered by" Expression="[UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="522,1028" sap2010:WorkflowViewState.IdRef="Switch`1_4">
+    <Switch x:TypeArguments="x:String" DisplayName="Check which connector the event was triggered by" Expression="[UiPathEventConnector]" sap:VirtualizedContainerService.HintSize="452,1028" sap2010:WorkflowViewState.IdRef="Switch`1_4">
       <Switch.Default>
         <Sequence DisplayName="Default" sap:VirtualizedContainerService.HintSize="450,234" sap2010:WorkflowViewState.IdRef="Sequence_17">
           <sap:WorkflowViewStateService.ViewState>
@@ -218,7 +219,7 @@
         </umam:GetEmailByIdConnections>
       </Sequence>
     </Switch>
-    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="InitConfig - Invoke Workflow File (InitConfig.xaml)" sap:VirtualizedContainerService.HintSize="522,182" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="InitConfig.xaml">
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="InitConfig - Invoke Workflow File (InitConfig.xaml)" sap:VirtualizedContainerService.HintSize="452,182" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="InitConfig.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="out_Config">[config]</OutArgument>
       </ui:InvokeWorkflowFile.Arguments>
@@ -229,7 +230,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:InvokeWorkflowFile>
-    <If Condition="[(GmailMessage IsNot Nothing AndAlso GmailMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString)) OrElse (OutlookMessage IsNot Nothing AndAlso OutlookMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString))]" sap:VirtualizedContainerService.HintSize="522,614" sap2010:WorkflowViewState.IdRef="If_1">
+    <If Condition="[(GmailMessage IsNot Nothing AndAlso GmailMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString)) OrElse (OutlookMessage IsNot Nothing AndAlso OutlookMessage.Subject.Contains(config(&quot;SubjectFilter&quot;).ToString))]" sap:VirtualizedContainerService.HintSize="452,614" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,241" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <sap:WorkflowViewStateService.ViewState>
@@ -263,7 +264,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <If Condition="[main_filesFound = true]" sap:VirtualizedContainerService.HintSize="522,614" sap2010:WorkflowViewState.IdRef="If_5">
+    <If Condition="[main_filesFound = true]" sap:VirtualizedContainerService.HintSize="452,614" sap2010:WorkflowViewState.IdRef="If_5">
       <If.Then>
         <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,241" sap2010:WorkflowViewState.IdRef="Sequence_4">
           <sap:WorkflowViewStateService.ViewState>
@@ -273,6 +274,7 @@
           </sap:WorkflowViewStateService.ViewState>
           <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="ProcessFiles - Invoke Workflow File (ProcessFiles.xaml)" sap:VirtualizedContainerService.HintSize="416,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ProcessFiles.xaml">
             <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_ResultsDB">[out_dt_Results]</OutArgument>
               <InArgument x:TypeArguments="scg:List(scg:Dictionary(x:String, x:String))" x:Key="in_ExtractionRules">[extractionRules]</InArgument>
               <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dt_BaseOfResult">[dt_baseOfResult]</InArgument>
               <OutArgument x:TypeArguments="x:Boolean" x:Key="out_ProcessOutcome">[processFiles_Outcome]</OutArgument>
