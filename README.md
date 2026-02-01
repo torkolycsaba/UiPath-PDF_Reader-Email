@@ -27,7 +27,7 @@ Works with Gmail or Outlook, depending on which Integration Service connector is
 
 ## Assets – setup requirements
   - ### All 5 **Assets** must be of type Text.
-  - ### Recommended Asset names:
+  - ### Recommended Asset names
     - SubjectFilter
     - AttachmentKeyword
     - OutputExcelPath
@@ -55,9 +55,16 @@ Works with Gmail or Outlook, depending on which Integration Service connector is
       - **TEXT** – characters and numbers
       - **CURRENCY** – numeric values followed by a 3-letter currency code (e.g. EUR, USD)
 
-### You can test the workflow locally by: 
+## Local workflow test
   - Creating the Assets and an Event Trigger in Orchestrator.
   - Sending a test email you want to work with that would normally trigger the event.
   - Copy the "UiPathEventObjectId" and "UiPathEventConnector" from the logs of the job.
   - Paste the Id into the relevant "Get Email by ID" activity in the first switch-case of the Main.xaml, and assign the Connector to the "UiPathEventConnector" variable.
   - You can now run the workflow locally without relying on external trigger.
+### A test case ("ExpectedData_TestCase.xaml") is included for **Main.xaml**
+  - The test aims to execute the whole workflow with a test email (UiPathEveneObjectID) and verify the result datatable with a *user-defined* example datatable read from an excel file from /TestData.
+  - By default it verifies the *number of columns*, the *name of the columns* and the *data of the rows*.
+  - The **TestData** folder contains a template file named *private.testing.config.example.json*. To run the test case, you must:
+    - Create a copy of this file and rename it to *private.testing.config.json*.
+    - Open the new file and insert your test email's **UiPathEventObjectId** in the appropriate field (e.g., **gmail_test_id**).
+    - Use this file in the **Read Text File** activity.
