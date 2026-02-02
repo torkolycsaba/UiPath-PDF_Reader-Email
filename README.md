@@ -34,7 +34,7 @@ Works with Gmail or Outlook, depending on which Integration Service connector is
     - NotificationChannel
     - ExtractionRules
   - ### Example configuration scenario
-    - **Goal**: Trigger the process when an email is received with "Invoices" in the subject. Process PDF attachments that contain "Invoice" in the filename. Extract Invoice Number, Invoice Date, and Total Amount from each PDF. Save the results into an Excel file locally.
+    - **Goal**: Trigger the process when an email is received with "Invoices" in the subject. Process PDF attachments that contain "Invoice" in the filename. Extract Invoice Number, Invoice Date, and Total Amount from each PDF. Save the results into an Excel file locally. Send a notification email upon success to *john@doe.com*.
       - **Asset** values
         - SubjectFilter → Invoices
         - AttachmentKeyword → Invoice
